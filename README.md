@@ -1,5 +1,5 @@
  
-> A Vue.js project with iview . axios.
+> A Vue.js project
 
 ## Build Setup
 

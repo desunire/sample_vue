@@ -4,7 +4,6 @@ import axios from 'axios'
 export const test = (para) =>{
     return axios.post('/api/rooms/token',para,{headers:{
             'Content-Type':'application/json',
-            'x-access-token':localStorage.getItem('zaccesstoken')
         }})
 }
 

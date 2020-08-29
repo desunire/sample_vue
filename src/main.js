@@ -8,9 +8,10 @@ Vue.config.productionTip = false
 
 
 /* use iview*/
-import iView from 'iview';
-import 'iview/dist/styles/iview.css';
-Vue.use(iView);
+import ViewUI from 'view-design';
+// import style
+import 'view-design/dist/styles/iview.css';
+Vue.use(ViewUI);
 
 /*全局加载axios拦截器---配置axios的原型链*/
 import './axios/axios'

@@ -4,24 +4,17 @@
 
 import {isJSON} from '../tool/tool'
 
-import {Spin} from 'iview'
-
-import 'iview/dist/styles/iview.css'
-
 import axios from 'axios'
 
 import Vue from 'vue'
 
 import qs from 'qs'
 
-Vue.prototype.$axios = axios
+Vue.prototype.$axios = axios;
 
+const serverUrl = "";
 
-const serverurl = "https://avcapdemo.zealcomm.cn:8083"
-//https://avcapdemo.zealcomm.cn:8083
-//http://localhost:8082
-/**/
-axios.defaults.baseURL = serverurl;
+axios.defaults.baseURL = serverUrl;
 
 /*请求超时时间*/
 axios.defaults.timeout = 60000;
@@ -36,6 +29,7 @@ axios.defaults.timeout = 60000;
   // 最后一个函数需return出相应数据
   // 可以修改headers
   */
+
 // axios.defaults.transformRequest = function(data,headers){
 //     console.log("请求的参数")
 //     console.log(JSON.stringify(data));
@@ -47,8 +41,6 @@ axios.defaults.timeout = 60000;
 
 //`transformResponse` 在传递给 then/catch 前，允许修改响应数据
 axios.defaults.transformResponse = function(data){
-    // console.log(data);
-    // console.log(typeof data)
     if(isJSON(data)){
         return JSON.parse(data);
     }
@@ -60,48 +52,23 @@ axios.defaults.withCredentials = false;
 
 
 /*定义允许的响应内容的最大尺寸*/
-axios.defaults.maxContentLength = 20000;
+axios.defaults.maxContentLength = 2000000;
 
 
 /*request拦截器*/
 axios.interceptors.request.use(function (res) {
-    Spin.show({
-        render: (h) => {
-            return h('div', [
-                h('Icon', {
-                    'class': 'demo-spin-icon-load',
-                    props: {
-                        type: 'ios-loading',
-                        size: 18
-                    }
-                }),
-                h('div', 'Loading')
-            ])
-        }
-    });
-    console.log('request interceptors')
-    console.log(res)
+    console.log(`request interceptors,${JSON.stringify(res)},${new Date()}`);
     return res;
 },function (error) {
-    console.log('request interceptors error')
-    console.log(error)
-    Spin.hide();
+    console.log(`request interceptors error,${JSON.stringify(error)},${new Date()}`);
     return Promise.reject(error)
-})
+});
 
 /*response拦截器*/
-axios.interceptors.response.use(function (rep) {
-    console.log("response interceptors")
-    console.log(rep)
-    Spin.hide();
-    if (rep.code == 401){
-        localStorage.removeItem('zaccesstoken');
-        localStorage.removeItem('zuserId');
-    }
-    return rep;
+axios.interceptors.response.use(function (resp) {
+    console.log(`response interceptors,${JSON.stringify(resp)},${new Date()}`);
+    return resp;
 },function (error) {
-    console.log("response interceptors error")
-    // console.log(error)
-     Spin.hide();
-    return Promise.reject(error)
-})
+    console.log(`response interceptors error,${JSON.stringify(error)},${new Date()}`);
+    return Promise.reject(error.response);
+});
